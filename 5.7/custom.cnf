@@ -1,5 +1,7 @@
 [mysqld]
 bind-address             = 0.0.0.0
+datadir                  = /opt/tmpfs 
+user                     = mysql
 
 thread_cache_size        = 8
 query_cache_size         = 32M
