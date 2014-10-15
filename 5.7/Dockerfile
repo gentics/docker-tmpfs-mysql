@@ -2,7 +2,7 @@
 #
 # VERSION               0.0.1
 
-FROM     mysql:5.7
+FROM mysql:5.7
 
 ENV TMPFS_SIZE 4000
 
@@ -22,10 +22,10 @@ RUN chmod +x /entrypoint.sh
 
 RUN mkdir -p /opt/tmpfs
 RUN chown mysql: /opt/tmpfs -R
-RUN mysql_install_db --user=mysql --datadir=/opt/tmpfs --basedir=/usr/local/mysql/
+RUN mysql_install_db --user=mysql --insecure --datadir=/opt/tmpfs --basedir=/usr/local/mysql/
  
 COPY setup.sql /var/tmp/setup.sql
-RUN mysqld --init-file=/var/tmp/setup.sql --datadir=/opt/tmpfs --user=mysql & sleep 10s && killall mysqld && rm /var/tmp/setup.sql
+RUN /usr/local/mysql/support-files/mysql.server start && mysql -e 'source /var/tmp/setup.sql' && killall mysqld && rm /var/tmp/setup.sql
 
 EXPOSE 3306
-CMD ["mysqld", "--basedir=/usr/local/mysql/", "--datadir=/opt/tmpfs", "--user=mysql"]
+CMD ["mysqld"]
