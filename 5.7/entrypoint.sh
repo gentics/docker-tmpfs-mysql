@@ -3,6 +3,7 @@
 set -e
 TMPFS_DIR=/opt/tmpfs
 
+echo "Using tmpfs size: $TMPFS_SIZE"
 echo "none            $TMPFS_DIR  tmpfs   defaults,size=${TMPFS_SIZE}m,uid=999,gid=1000,mode=0700          0       0" >> /etc/fstab
 
 # Move away old mysql data
@@ -15,4 +16,4 @@ mkdir $TMPFS_DIR  && chown mysql: $TMPFS_DIR
 mount $TMPFS_DIR
 mv /opt/backup/* $TMPFS_DIR
 
-exec "$@"
+exec "eatmydata" "$@"

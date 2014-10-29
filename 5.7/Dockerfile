@@ -7,8 +7,7 @@ FROM mysql:5.7
 ENV TMPFS_SIZE 4000
 
 RUN apt-get update
-RUN apt-get -y install psmisc
-
+RUN apt-get -y install psmisc eatmydata
 
 # Add custom config
 RUN mkdir -p /etc/mysql/conf.d
