@@ -5,7 +5,7 @@ The main goal for this container image is to provide a very fast mysql server wh
 Example usage:
 
     docker pull gentics/tmpfs-mysql
-    docker run -d --privileged  -e TMPFS_SIZE=300 -p 3000:3306 gentics/tmpfs-mysql:5.7
+    docker run -d --cap-add=SYS_ADMIN  -e TMPFS_SIZE=300 -p 3000:3306 gentics/tmpfs-mysql:5.7
     mysql -u root -pfinger -h 127.0.0.1 -P 3000
 
 More info https://registry.hub.docker.com/u/gentics/tmpfs-mysql/
