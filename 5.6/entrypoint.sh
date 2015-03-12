@@ -18,4 +18,5 @@ echo "Mounting tmpfs and adding data"
 mount $TMPFS_DIR
 mv /opt/backup/* $TMPFS_DIR
 
-exec "eatmydata" "$@"
+#exec "eatmydata" "$@"
+exec "$@"
