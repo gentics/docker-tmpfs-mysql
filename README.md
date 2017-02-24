@@ -1,11 +1,45 @@
-The main goal for this container image is to provide a very fast mysql server which may be used for integration tests or other testing purposes. The storage for this mysql server uses an internal tmpfs. The size of this tmpfs ramdisk can be configured using the **TMPFS_SIZE** environment setting. The password is currently hardcoded to *finger*. This container should only be used for testing purposes.
+# This project is now deprecated.
 
-> Please note that this container requires privileged permissions to mount the tmpfs
+# Use the official mysql image instead.
 
-Example usage:
+## via docker cli
 
-    docker pull gentics/tmpfs-mysql
-    docker run -d --cap-add=SYS_ADMIN  -e TMPFS_SIZE=300 -p 3000:3306 gentics/tmpfs-mysql:5.7
-    mysql -u root -pfinger -h 127.0.0.1 -P 3000
+```docker run --rm  -p 3306:3306 -e MYSQL_ROOT_PASSWORD=finger  --tmpfs=/var/lib/mysql/:rw,noexec,nosuid,size=600m --tmpfs=/tmp/:rw,noexec,nosuid,size=50m mysql:5.7```
+ 
 
-More info https://registry.hub.docker.com/u/gentics/tmpfs-mysql/
+## via docker-compose
+
+```
+  mysql-57:
+    image: mysql:5.7
+    ports:
+     - "3306:3306"
+    volumes:
+     - "/opt/docker/mysql.conf.d:/etc/mysql/conf.d"
+    environment:
+     - MYSQL_ROOT_PASSWORD=finger
+    tmpfs:
+     - /var/lib/mysql/:rw,noexec,nosuid,size=600m
+     - /tmp/:rw,noexec,nosuid,size=50m
+```
+
+
+/opt/docker/mysql.conf.d/custom.cnf
+```
+[mysqld]
+  bind-address             = 0.0.0.0
+  
+  innodb_flush_log_at_trx_commit = 2
+  innodb_lock_wait_timeout = 50
+
+  max_connect_errors       = 1000000
+  max_connections          = 900
+
+  character-set-server           = utf8
+  sql_mode                       = ""
+  innodb                         = FORCE
+  default-storage-engine         = InnoDB
+  max_allowed_packet             = 256M
+```
+
+
